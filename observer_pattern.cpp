@@ -1,7 +1,9 @@
 /****
  * Simple observer pattern.
- * A key notifier in a TV software notifies possible menus
- *  on the TV software when a button is pressed on the remote controller.
+ * Short story:
+ * 	A key notifier in a TV software notifies possible menus
+ * 	on the TV software when a button is pressed on the remote controller.
+ * 	Accoring to their states, menus take necessary actions.
  * */
 
 #include <iostream>
@@ -105,5 +107,5 @@ int main(){
 	
 	//Press Main Menu button
 	kn.setKey(KEY_MAIN_MENU);
-	
+
 }
