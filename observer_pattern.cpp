@@ -7,9 +7,9 @@
 #include <iostream>
 #include <vector>
 
-/// OSDs (Menus) of TV
-static const int MAIN_MENU = 1;
-static const int IDLE_MENU = 0;
+/// State of Menus/OSDs
+static const int OFF = 0;
+static const int ON = 1;
 
 //Remote Controller Keys
 static const int KEY_MAIN_MENU = 1;
@@ -26,71 +26,69 @@ public:
 class Subject
 {
 public:
-	virtual void registerObserver(Observer *o);
-//	virtual void removeObserver(Observer *o);
-	virtual void notifyObservers();
-}
+	virtual void registerObserver(Observer *o) = 0;
+//	virtual void removeObserver(Observer *o) = 0;
+	virtual void notifyObservers() = 0;
+};
 
 class KeyNotifier : public Subject
 {
 	int _key;
-	vector<Observer*> _menuList;
+	std::vector<Observer*> _menuList;
 
 public:
 	void registerObserver(Observer* o){
 		_menuList.push_back(o);
 	}
 
-	int notifyObservers(){
-		for(auto &menu : _menuList){
-			menu.update(_key);
+	void notifyObservers(){
+		for(const auto &menu : _menuList){
+			menu->update(_key);
 		}
 	}
 
-	int setKey(int key){
+	void setKey(int key){
 		_key = key;
 		//Notify all observers!
-		notify();
+		notifyObservers();
 	}
 };
 
 class MainMenu : public Observer{
-	int _currMenu;
+	int _state;
 public:
-	MainMenu(KeyNotifier* pKeyNotifier, int currMenu) : _currMenu(currMenu){
+	MainMenu(KeyNotifier* pKeyNotifier, int state) : _state(state){
 		/// Register observer to subject
 		pKeyNotifier->registerObserver(this);
 	}
 
-	virtual bool update(int key){
-		if(_currMenu == IDLE_MENU && key == KEY_MAIN_MENU){
-			std::cout << "menu key: " << "Main Menu is opened" << std::endl;
-			return true;
+	void update(int key){
+		if(_state == OFF && key == KEY_MAIN_MENU){
+			std::cout << "Main Menu is opened" << std::endl;
+			_state = ON;
 		}
 		else{
 			std::cout << "Main menu, do nothing!" << std::endl;
-			return false;
 		}
 	}
 };
 
 class IdleMenu: public Observer{
-	int _currMenu;
+	int _state;
 
 public:
-	IdleMenu(KeyNotifier* pKeyNotifier, int currMenu) : _currMenu(currMenu){
+	IdleMenu(KeyNotifier* pKeyNotifier, int state) : _state(state){
 		//Attach idle menu to key notifier.
 		pKeyNotifier->registerObserver(this);
 	}
 
-	virtual bool update(int key){
-		if(_currMenu == MAIN_MENU && key == KEY_EXIT){
-			std::cout << "exit key: " << "Main Menu is closed" << std::endl;
-			return true;
+	void update(int key){
+		if(_state == OFF && key == KEY_MAIN_MENU){
+			std::cout << "Main Menu is closed" << std::endl;
+			_state = ON;
 		}
 		else{
 			std::cout << "Idle menu, do nothing!" << std::endl;
-			return false;
 		}
 	}	
 	
@@ -99,15 +97,13 @@ public:
 
 
 int main(){
+
+	/// TV is starting...
 	KeyNotifier kn;
-	MainMenu mm(&kn, 0);
-	IdleMenu im(&kn, 0);
+	MainMenu mm(&kn, OFF);
+	IdleMenu im(&kn, OFF); ///No menu at all, it's video screen.
 	
-	//Open main menu
+	//Press Main Menu button
 	kn.setKey(KEY_MAIN_MENU);
-
-	//Do smth....
-
-	//Close main menu
-	kn.setKey(KEY_EXIT);
+	
 }
