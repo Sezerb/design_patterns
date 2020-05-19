@@ -60,7 +60,7 @@ std::ostream &operator<<(std::ostream &os, const Pizza &pizza)
     os << pizza._dough << std::endl;
     os << pizza._sauce << std::endl;
 
-	return os;
+    return os;
 }
 
 /// Pizza implementations
@@ -186,17 +186,17 @@ public:
 
 int main()
 {
-		std::unique_ptr<PizzaStore> nyStore(new NYPizzaStore());
-		std::unique_ptr<PizzaStore> chicagoStore(new ChicagoPizzaStore());
+	std::unique_ptr<PizzaStore> nyStore(new NYPizzaStore());
+	std::unique_ptr<PizzaStore> chicagoStore(new ChicagoPizzaStore());
  
-		std::unique_ptr<Pizza> pizza1(nyStore->orderPizza("cheese"));
-		std::cout << "Baris ordered a " << pizza1->getName() << std::endl; 
+	std::unique_ptr<Pizza> pizza1(nyStore->orderPizza("cheese"));
+	std::cout << "Baris ordered a " << pizza1->getName() << std::endl; 
  
-		std::unique_ptr<Pizza> pizza2(chicagoStore->orderPizza("pepperoni"));
-		std::cout << "Kemal ordered a " << pizza2->getName() << std::endl;
+	std::unique_ptr<Pizza> pizza2(chicagoStore->orderPizza("pepperoni"));
+	std::cout << "Kemal ordered a " << pizza2->getName() << std::endl;
 
-        std::unique_ptr<Pizza> pizza3(nyStore->orderPizza("pepperoni"));
-        std::cout << "Ali ordered a " << pizza3->getName() << std::endl; 
+    std::unique_ptr<Pizza> pizza3(nyStore->orderPizza("pepperoni"));
+    std::cout << "Ali ordered a " << pizza3->getName() << std::endl; 
 
     return 0;
 }
