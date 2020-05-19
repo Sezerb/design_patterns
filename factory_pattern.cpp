@@ -5,7 +5,7 @@
  * A pizza brand wants to give franchise service.
  *  They have a contract and pizza store structure.
  *   They provide an orderPizza method and an abstract createPizza method.
- *    createPizza is abstract because they want some customized according to local aspects. 
+ *    createPizza is abstract because they want some customized pizzas according to local aspects. 
  * 
  * */
 #include <iostream>
@@ -34,7 +34,7 @@ public:
 
 	virtual void bake() 
     {
-		 std::cout << "Bake for 25 minutes at 350" << std::endl;
+	    std::cout << "Bake for 25 minutes at 350" << std::endl;
 	}
     virtual void cut()
     {
